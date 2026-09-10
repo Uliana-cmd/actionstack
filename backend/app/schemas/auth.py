@@ -1,15 +1,13 @@
-from pydantic import BaseModel, EmailStr, Field, SecretStr
+from pydantic import BaseModel
 
 class LoginRequest(BaseModel):
-        email : EmailStr
-        password: str = Field(
-      ..., min_length=8, description='Пароль (минимум 8 символов)'
-  )
+    email: str
+    password: str
 
 class Token(BaseModel):
-  access_token: str
-  token_type: str = 'bearer'
+    access_token: str
+    token_type: str = "bearer"
 
 class TokenPayload(BaseModel):
-  sub: str | None = None
-  exp: int | None = None
+    sub: str | None = None
+    exp: int | None = None
