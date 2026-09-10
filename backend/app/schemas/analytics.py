@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 
 
-class DirectionStats(BaseModel):
+class FieldStats(BaseModel):
     direction: str
     people_count: int
     avg_progress: float
+    field_name: str 
 
 
 class DepartmentAnalytics(BaseModel):
@@ -12,7 +13,7 @@ class DepartmentAnalytics(BaseModel):
     department_name: str
     people_count: int
     avg_progress: float
-    by_direction: list[DirectionStats] = []
+    by_direction: list[FieldStats] = []
 
 
 class ConfirmedSkillItem(BaseModel):
