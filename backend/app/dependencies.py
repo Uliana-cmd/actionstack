@@ -1,43 +1,57 @@
-# app/crud/user.py
-from sqlalchemy.orm import Session
+from datetime import datetime
 from app.schemas.user import UserRead
 
-def get(db: Session, user_id: int):
-    # Пишем сырой SQL-запрос с точным указанием колонок из вашей БД
+def get(db_cursor, user_id: int):
+    # Выбираем строго определенные поля, чтобы индексы всегда были фиксированными
     query = """
         SELECT id, login, email, department_id, created_at, is_hired, field_id 
         FROM public.users 
-        WHERE id = :id
+        WHERE id = %s;
     """
-    result = db.execute(query, {"id": user_id}).fetchone()
+    db_cursor.execute(query, (user_id,))
+    row = db_cursor.fetchone()
     
-    if not result:
+    if not row:
         return None
         
-    # Превращаем результат Row в словарь (в зависимости от версии SQLAlchemy: result._asdict() или dict(result))
-    user_dict = result._asdict() 
-    
-    # Возвращаем Pydantic-модель, чтобы в роутерах работал автокомплит и валидация
-    return UserRead.model_validate(user_dict)
+    # Сопоставляем индексы кортежа (0, 1, 2...) со свойствами Pydantic схемы
+    return UserRead(
+        id=row[0],
+        login=row[1],
+        email=row[2],
+        department_id=row[3],
+        created_at=row[4],
+        is_hired=row[5],
+        field_id=row[6]
+    )
 
-def authenticate(db: Session, login_from_form: str, password_raw: str):
-    # Ищем пользователя по логину (так как в форме OAuth2 это поле называется username)
+def authenticate(db_cursor, login_from_form: str, password_raw: str):
+    # Ищем пользователя по логину
     query = """
-        SELECT id, login, email, hash_password, department_id, created_at, is_hired, field_id 
+        SELECT id, login, email, department_id, created_at, is_hired, field_id, hash_password 
         FROM public.users 
-        WHERE login = :login
+        WHERE login = %s;
     """
-    result = db.execute(query, {"login": login_from_form}).fetchone()
+    db_cursor.execute(query, (login_from_form,))
+    row = db_cursor.fetchone()
     
-    if not result:
+    if not row:
         return None
         
-    user_dict = result._asdict()
+    # Извлекаем хэш пароля (он идет 7-м элементом, индекс 6)
+    # .strip() обязателен, так как тип character(100) забивает остаток строки пробелами
+    stored_hash = row[7].strip() if row[7] else ""
     
-    # Хэш пароля в БД имеет тип character(100), PostgreSQL может дополнить его пробелами. 
-    # Безопаснее сделать .strip(), если используете библиотеку вроде passlib/bcrypt
-    stored_hash = user_dict["hash_password"].strip()
+    # --- ТУТ ВАША ПРОВЕРКА ПАРОЛЯ ---
+    # Например: if not verify_password(password_raw, stored_hash): return None
     
-    # Здесь должна быть ваша проверка пароля (например, pwd_context.verify)
-    # Если проверка прошла успешно:
-    return UserRead.model_validate(user_dict)
+    # Если пароль подошел, собираем схему без хэша пароля
+    return UserRead(
+        id=row[0],
+        login=row[1],
+        email=row[2],
+        department_id=row[3],
+        created_at=row[4],
+        is_hired=row[5],
+        field_id=row[6]
+    )
