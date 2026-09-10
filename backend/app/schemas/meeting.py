@@ -21,7 +21,7 @@ class MeetingSkillOut(BaseModel):
 class MeetingCreate(BaseModel):
     user_id: int
     manager_id: int
-    date: date
+    meeting_date: date
     summary: str = ""
 
 
@@ -34,7 +34,7 @@ class MeetingOut(BaseModel):
     id: int
     user_id: int
     manager_id: int
-    date: date
+    meeting_date: date
     summary: str
     created_at: Optional[datetime] = None
     skills: list[MeetingSkillOut] = []
@@ -47,7 +47,7 @@ class MeetingShort(BaseModel):
     id: int
     user_id: int
     manager_id: int
-    date: date
+    meeting_date: date
     summary: str
 
     class Config:
