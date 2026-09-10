@@ -4,7 +4,7 @@ from typing import Optional
 
 class SkillBase(BaseModel):
     name: str
-    direction: str
+    field_id: int
 
 
 class SkillCreate(SkillBase):
@@ -13,7 +13,7 @@ class SkillCreate(SkillBase):
 
 class SkillUpdate(BaseModel):
     name: Optional[str] = None
-    direction: Optional[str] = None
+    field_id: Optional[int] = None
 
 
 class SkillOut(SkillBase):

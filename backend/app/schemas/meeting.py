@@ -5,38 +5,41 @@ from typing import Optional
 
 class MeetingSkillCreate(BaseModel):
     skill_id: int
-    confirmed: bool = False
+    is_defended: bool = False
+    mark: int = 0
+    problems_comm: Optional[str] = None
 
 
 class MeetingSkillOut(BaseModel):
     id: int
     skill_id: int
     skill_name: Optional[str] = None
-    confirmed: bool
+    mark: int
+    problems_comm: Optional[str] = None
+    is_defended: bool
 
     class Config:
         from_attributes = True
 
 
 class MeetingCreate(BaseModel):
-    user_id: int
-    manager_id: int
-    meeting_date: date
-    summary: str = ""
+    employee_id: int
+    inspector_id: int
+    meeting_date: datetime
+    totals: str = ""
 
 
 class MeetingUpdate(BaseModel):
-    meeting_date: Optional[date] = None
-    summary: Optional[str] = None
+    meeting_date: Optional[datetime] = None
+    totals: Optional[str] = None
 
 
 class MeetingOut(BaseModel):
     id: int
-    user_id: int
-    manager_id: int
+    employee_id: int
+    inspector_id: int
     meeting_date: date
-    summary: str
-    created_at: Optional[datetime] = None
+    totals: str
     skills: list[MeetingSkillOut] = []
 
     class Config:
@@ -45,10 +48,10 @@ class MeetingOut(BaseModel):
 
 class MeetingShort(BaseModel):
     id: int
-    user_id: int
-    manager_id: int
-    meeting_date: date
-    summary: str
+    employee_id: int
+    inspector_id: int
+    meeting_date: datetime
+    totals: str
 
     class Config:
         from_attributes = True
