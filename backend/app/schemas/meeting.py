@@ -38,7 +38,7 @@ class MeetingOut(BaseModel):
     id: int
     employee_id: int
     inspector_id: int
-    meeting_date: date
+    meeting_date: datetime
     totals: str
     skills: list[MeetingSkillOut] = []
 
