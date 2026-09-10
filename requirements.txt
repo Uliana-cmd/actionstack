@@ -1,2 +1,10 @@
 fastapi
-uvicorn
+pydantic[email]
+uvicorn[standard]
+sqlalchemy
+psycopg[binary]
+pydantic
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
