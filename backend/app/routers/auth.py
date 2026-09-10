@@ -18,17 +18,22 @@ def register(data: UserCreate, db: Session = Depends(get_db)):
     return user_crud.create(db, data)
 
 
+# routers/auth.py
 @router.post("/login", response_model=Token)
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # В form.username прилетит то, что пользователь ввел в поле Login/Email на фронтенде
     user = user_crud.authenticate(db, form.username, form.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверный email или пароль",
+            detail="Неверный логин или пароль",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    # Так как user теперь — это валидный объект UserRead, мы можем спокойно писать user.id
     token = create_access_token(subject=str(user.id))
     return Token(access_token=token, token_type="bearer")
+
 
 
 @router.get("/me", response_model=UserRead)
