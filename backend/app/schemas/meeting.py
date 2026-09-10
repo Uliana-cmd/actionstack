@@ -23,7 +23,7 @@ class MeetingSkillOut(BaseModel):
 
 
 class MeetingCreate(BaseModel):
-    employee_id: int
+    user_id: int
     inspector_id: int
     meeting_date: datetime
     totals: str = ""
@@ -36,7 +36,7 @@ class MeetingUpdate(BaseModel):
 
 class MeetingOut(BaseModel):
     id: int
-    employee_id: int
+    user_id: int
     inspector_id: int
     meeting_date: datetime
     totals: str
@@ -48,7 +48,7 @@ class MeetingOut(BaseModel):
 
 class MeetingShort(BaseModel):
     id: int
-    employee_id: int
+    user_id: int
     inspector_id: int
     meeting_date: datetime
     totals: str
