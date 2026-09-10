@@ -15,7 +15,7 @@ class DepartmentCreate(DepartmentBase):
 class DepartmentUpdate(BaseModel):
     name: Optional[str] = None
     parent_id: Optional[int] = None
-    manager_id: int
+    manager_id: Optional[int] = None
 
 
 class DepartmentOut(DepartmentBase):
