@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+ENV/
+
+# Переменные окружения
+.env
+.env.local
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IDEA
+.idea/
+
+# Node (для фронта)
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+yarn-error.log*
+
+# Тесты и кэш
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Логи
+*.log
+
+# Загрузки файлов (если будете хранить локально)
+uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Миграции Alembic (если не хотите коммитить сгенерированные версии)
+# Раскомментируйте, если решите не хранить миграции в git
+# alembic/versions/*.py
