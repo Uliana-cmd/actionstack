@@ -8,11 +8,14 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 
 WORKDIR /app
 
-# ставим библиотеки языка
-COPY --chown=appuser:appuser requirements.txt .
+# Шаг 1: Копируем только requirements.txt для кэширования слоев
+COPY --chown=appuser:appuser backend/app/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем проект
-COPY --chown=appuser:appuser . .
+# Шаг 2: Создаем подпапку data (чтобы у appuser были на неё права)
+RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+
+# Шаг 3: Копируем локальную папку backend/app внутрь виртуальной папки /app/app
+COPY --chown=appuser:appuser backend/app/ ./app
 
 USER appuser

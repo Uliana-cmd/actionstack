@@ -30,7 +30,7 @@ if [ ! -f "$FLAG_FILE" ]; then
 
   # 2. Накатываем структуру из template.sql в созданную БД
   echo "Развертывание шаблона template.sql в базу $DB_NAME..."
-  psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f /app/template.sql
+  psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f /app/models/action_stack.sql
 
   # 3. Создаем файл-маркер, чтобы в следующий раз пропустить этот блок
   mkdir -p /app/data

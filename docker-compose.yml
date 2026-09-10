@@ -1,39 +1,17 @@
-
 services:
-
   api-server:
     build: .
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
-    env_file: .env   # Пробрасывает настройки из .env внутрь Linux-контейнера
+    environment:
+      - PYTHONPATH=/app
+    env_file: .env
     ports:
-      - "8000:8000"  # Открываем доступ к FastAPI-серверу для Windows
+      - "8000:8000"
     extra_hosts:
-      - "host.docker.internal:host-gateway"  # Сетевой мост для связи с Windows из докера
+      - "host.docker.internal:host-gateway"
     volumes:
-#      - $UPLOAD_DIR:/app/templates
-#      - $SET_UP_DIR:/app/jobs
-      - app-db-marker:/app/data  # Постоянный диск Docker, защищающий файл-маркер
-#    depends_on:
-#      - redis-service
+      - app-db-marker:/app/data
     restart: always
-
-#  celery-doc:
-#    build: .
-#    command: celery -A renderWorker.celery_app worker --loglevel=info --pool=solo
-##    volumes:
-##      - $UPLOAD_DIR:/app/templates
-##      - $SET_UP_DIR:/app/jobs
-#    env_file:
-#      - .env
-##    depends_on:
-##      - redis-service
-#    restart: always
 
 volumes:
   app-db-marker:
-
-#networks:
-#  default:
-#    ipam:
-#      config:
-#        - subnet: 172.50.0.0/16
